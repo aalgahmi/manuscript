@@ -1,0 +1,23 @@
+book:
+  compiler:
+    title: A Sample Book
+    author: Abdulmalek Al-Gahmi
+    about: A example book demoing the manuscript system for authoring and publishing books
+    
+    output: manuscript
+    
+    kramdown:
+      html:
+        input: GFM
+        toc_levels: "1,2"
+        math_engine: mathjax
+        syntax_highlighter: rouge
+
+      tex:
+        max_figure_width: 300px
+        input: GFM
+        latex_headers: chapter,section,subsection,subsubsection,paragraph,subparagraph
+        syntax_highlighter: minted
+        syntax_highlighter_opts:
+          line_numbers: true
+        

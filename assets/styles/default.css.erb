@@ -1,0 +1,69 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300);
+
+<%= Rouge::Themes::Github.render(scope: '.highlighter-rouge') %>
+
+body {
+  font-family: Georgia, 'Open Sans', 'Nassim Arabic Regular', 'Geeza Pro';
+  font-size: 18px;
+  counter-reset: h1;
+}
+
+h1 {
+/*  counter-reset : h2;*/
+}
+
+h1:before {
+  content : counter(h1,decimal) " ";
+  font-size: 64px;
+  counter-increment : h1;
+}
+
+.jumbotron {
+  background: none;
+  text-align: center;
+}
+
+div.header {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+div.header small {
+  font-size: 75%;
+  font-weight: normal;
+}
+
+div.header.part {
+  font-size: 150%;
+}
+
+figure img {
+	margin: .75em auto;
+}
+
+figcaption {
+	clear: left;
+	margin: .75em 0;
+	text-align: center;
+	font-style: italic;
+	line-height: 1.5em;
+}
+
+.highlighter-rouge {
+  direction: ltr;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #fdfdfd;
+  border:1px solid #e1e8ed;
+  border-radius: 0.28571429rem;
+}
+
+code.highlighter-rouge {
+  padding: .1em .4em;
+}
+
+div.highlighter-rouge {
+  padding: .6em;
+  margin-top: .6em;
+  margin-button: .6em;
+  white-space: pre;
+}

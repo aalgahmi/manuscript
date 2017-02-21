@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    kramdown (1.13.2)
+    mini_magick (4.6.0)
+    rouge (2.0.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  kramdown
+  mini_magick
+  rouge
+
+BUNDLED WITH
+   1.14.3

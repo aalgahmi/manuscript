@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'bundler/setup'
+Bundler.require(:default)
+require "#{__dir__}/lib/manuscript"
+
+if ARGV.count == 1 && TARGETS.keys.include?(ARGV[0])
+  TARGETS[ARGV[0]].new(:default, ARGV[0]).compile
+  puts "Done!"
+else
+  puts "Nothing was done; invalid target. Valid targets are html or tex."
+end

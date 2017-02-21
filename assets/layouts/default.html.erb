@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title><%= config['title'] %></title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">
+
+    <%= include_styles %>
+  
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <div class="header">
+          <%= config['title'] %><br>
+          <small><%= config['author'] %></small>
+        </div>
+        <p><%= config['about'] %></p>
+        <hr/>
+      </div>
+      <div class="row">
+        <div class="col-md-8" id="main">
+          <%= Kramdown::Document.new(book, config['kramdown'][target]).to_html %>
+        </div>
+        <div class="col-md-4">
+          <div id="toc" class="well" >
+            <h3>Contents</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>   
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("img").addClass("img-responsive");
+        $("table").addClass("table table-striped");
+        
+        partToc = null;
+        $("#markdown-toc > li > a").each(function(){
+          if ($($(this).attr('href')).hasClass("part")) {
+            $(this).parent().append("<ul class=\"part-toc\"></ul>");
+            partToc = $(this).parent().find('.part-toc');
+          } else {
+            $(this).parent().appendTo(partToc);
+          } 
+        });
+        
+        $("#markdown-toc").appendTo('#toc').addClass("list-unstyled nav");
+                
+        $("script[type='math/tex']").replaceWith(function() {
+            var tex = $(this).text();
+            return katex.renderToString(tex, {displayMode: false});
+        });
+
+        $("script[type='math/tex; mode=display']").replaceWith(function() {
+            var tex = $(this).html();
+            return katex.renderToString(tex.replace(/%.*/g, ''), {displayMode: true});
+        });
+        
+        $("a").each(function(){
+          if ($(this).attr('href').startsWith("#") && $($(this).attr('href')).is('figure')) {
+            $(this).text($($(this).attr('href') + ' > figcaption > span').text());
+          }
+        });
+      });
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+  </body>
+</html>

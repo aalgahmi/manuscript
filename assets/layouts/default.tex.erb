@@ -1,0 +1,33 @@
+\documentclass[fontsize=11pt,paper=a5,pagesize=auto]{scrbook}
+%\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{longtable}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{minted}
+\usepackage{upquote}
+\usemintedstyle{manni}
+\usepackage{color}
+\usepackage{booktabs}
+\usepackage{bbding}
+\usepackage{blindtext}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,      
+  urlcolor=cyan}
+
+\frenchspacing
+\begin{document}
+  \title{Programming in Java}
+  \subtitle{Basics - Objects - Applications}
+  \author{Abdulmalek Al-Gahmi}
+  \date{}
+
+  \maketitle
+  <%= Kramdown::Document.new(book, config['kramdown'][target]).to_latex %>
+\end{document}
+
