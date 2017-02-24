@@ -1,3 +1,5 @@
+require "#{__dir__}/../converter/html"
+
 module Manuscript
   module Compiler
     class Html
@@ -9,7 +11,7 @@ module Manuscript
       end
     
       def config
-        @config['book']['compiler']
+        @config['manuscript']['compiler']
       end
     
       def theme
@@ -20,17 +22,18 @@ module Manuscript
         @target
       end
     
-      def book 
-        @book ||= %(
-* TOC
-{:toc}
-
+      def content 
+        @content ||= %(
 #{`ls -1 #{APP_ROOT}/manuscript/* | sort | xargs awk 'FNR==1 && NR!=1 {print "\\n"}{print}'`}
         )
       end
     
       def include_styles
-        %(<style>#{ERB.new(File.read("#{APP_ROOT}/assets/styles/#{theme}.css.erb")).result(binding)}</style>)
+        ERB.new(File.read("#{APP_ROOT}/assets/styles/#{theme}.css.erb")).result(binding)
+      end
+      
+      def include_style(file)
+        File.read("#{APP_ROOT}/assets/styles/#{file}")
       end
     
       def compile

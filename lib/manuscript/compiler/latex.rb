@@ -1,3 +1,5 @@
+require "#{__dir__}/../converter/latex"
+
 module Manuscript
   module Compiler
     class Latex < Html
@@ -9,7 +11,7 @@ module Manuscript
       
         width = config['kramdown']['tex']['max_figure_width'].nil? ? 10000 : config['kramdown']['tex']['max_figure_width'].to_i
         Dir.foreach(".") do |f|
-          unless File.directory?(f)
+          unless File.directory?(f) || f.start_with?('.')
             image = MiniMagick::Image.open(f)
           
             width = image.width  if width > image.width 

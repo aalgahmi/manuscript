@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" xml:lang="en" unique-identifier="pubid">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:identifier id="pubid">urn:uuid:<%= SecureRandom.uuid %></dc:identifier>
+    <dc:title id="pubtitle"><%= config['title'] %></dc:title>
+    <dc:language id="publang">en</dc:language>
+    <dc:creator id="author"><%= config['author'] %></dc:creator>
+    <meta property="dcterms:modified"><%= Time.now.strftime("%Y-%m-%dT%H:%M:%S%:z")%></meta>
+  </metadata>
+  <manifest><%= include_opf_manifest_items %>
+  </manifest>
+  <spine><%= include_opf_spine_items %>
+  </spine>
+</package>

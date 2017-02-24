@@ -5,7 +5,7 @@ module Kramdown
         type = @options[:latex_headers][output_header_level(el.options[:level]) - 1]
         if ((id = el.attr['id']) ||
             (@options[:auto_ids] && (id = generate_id(el.options[:raw_text])))) && in_toc?(el)
-          if el.attr['class'] == 'part'
+          if el.attr['role'] == 'part'
             "\\part{#{inner(el, opts)}}\\hypertarget{#{id}}{}\\label{#{id}}\n\n"
           else
             "\\#{type}{#{inner(el, opts)}}\\hypertarget{#{id}}{}\\label{#{id}}\n\n"
@@ -18,9 +18,10 @@ module Kramdown
       def convert_standalone_image(el, opts, img)
         @figure_labels = (@figure_labels || [])
         attrs = attribute_list(el)
-        label =  "\\label{#{el.children.first.attr['alt'] || generate_id(el.children.first.attr['title'])}}"
-        @figure_labels << (el.children.first.attr['alt'] || generate_id(el.children.first.attr['title']))
-        "\\begin{figure}#{attrs}\n\\begin{center}\n#{img}\n\\end{center}\n\\caption{#{escape(el.children.first.attr['alt'])}}\n#{label}\n#{latex_link_target(el, true)}\n\\end{figure}#{attrs}\n"
+        label =  el.children.first.attr['alt'] || generate_id(el.children.first.attr['title'])
+        caption = escape(el.children.first.attr['title'] || el.children.first.attr['alt'])
+        @figure_labels << label
+        "\\begin{figure}#{attrs}\n\\begin{center}\n#{img}\n\\end{center}\n\\caption{#{caption}}\n\\label{#{label}}\n#{latex_link_target(el, true)}\n\\end{figure}#{attrs}\n"
       end
       
       def convert_a(el, opts)

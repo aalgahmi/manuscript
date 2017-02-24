@@ -1,10 +1,14 @@
-book:
+manuscript:
   compiler:
     title: A Sample Book
     author: Abdulmalek Al-Gahmi
     about: A example book demoing the manuscript system for authoring and publishing books
     
     output: manuscript
+    
+    epub:
+      cover_image: images/cover.png
+      include_mathjax: false
     
     kramdown:
       html:

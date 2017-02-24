@@ -12,11 +12,10 @@ module Kramdown
       end
 
       def convert_figure(el, indent)
-        @figure_counter = (@figure_counter || 0) + 1
         id = %(#{el.attr['alt'] || generate_id(el.attr['title'])})
         el.attr['alt'] = el.attr['title'] unless el.attr['title'].nil?
-        caption = "#{(el.attr['title'] ? "<figcaption><span>Figure #{@chapter_counter}.#{@figure_counter}</span>: #{el.attr['title']}</figcaption>" : "")}"
-        %(#{' '*indent}<figure id="#{id}"><img#{html_attributes(el.attr)} />#{caption}</figure>\n)
+        caption = "#{(el.attr['title'] ? "<figcaption><span>#{Manuscript::Compiler::Epub.label_figure(id)}</span>: #{el.attr['title']}</figcaption>" : "")}"
+        %(#{' '*indent}<figure id="#{id}">#{caption}<img#{html_attributes(el.attr)} /></figure>\n)
       end
       
       def convert_header(el, indent)
@@ -26,13 +25,13 @@ module Kramdown
         end
         
         @toc << [el.options[:level], attr['id'], el.children] if attr['id'] && in_toc?(el)
+        level = attr['role'] == 'part' ? 0 : output_header_level(el.options[:level])
+        Manuscript::Compiler::Epub.add_to_toc(el.options[:raw_text], level, attr['id'], attr['role']) if level <= 2
         if attr['role'] == 'part'
           %(#{' '*indent}<div id="#{attr['id']}" class="part header">#{inner(el, indent)}</div>)
         else
-          level = output_header_level(el.options[:level])
           if level == 1
-            @chapter_counter = (@chapter_counter || 0) + 1
-            @figure_counter = 0
+            Manuscript::Compiler::Epub.add_to_chapters(attr['id'])
             format_as_block_html("h#{level}", attr, %(<span class="u-pull-right">#{@chapter_counter}</span> #{inner(el, indent)}), indent)
           else
             format_as_block_html("h#{level}", attr, inner(el, indent), indent)
@@ -42,6 +41,19 @@ module Kramdown
       
       def convert_a(el, indent)
         format_as_span_html(el.type, el.attr, inner(el, indent))
+      end
+      
+      def convert_root(el, indent)
+        result = inner(el, indent)
+        if @footnote_location
+          result.sub!(/#{@footnote_location}/, footnote_content.gsub(/\\/, "\\\\\\\\"))
+        else
+          result << footnote_content
+        end
+        if @toc_code
+          result = "<%= include_toc %>"
+        end
+        result
       end
     end
   end

@@ -4,49 +4,46 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title><%= config['title'] %></title>
-
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta name="description" content="<%= config['about'] %>">
+    <meta name="author" content="<%= config['author'] %>">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">
-
-    <%= include_styles %>
-  
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <style>
+      <%= include_styles %>
+    </style>
   </head>
   <body>
-    <div class="container">
-      <div class="jumbotron">
-        <div class="header">
-          <%= config['title'] %><br>
-          <small><%= config['author'] %></small>
+    <header>
+      <div class="container">
+        <div class="row">    
+          <div class="twelve columns">
+            <h1><%= config['title'] %></h1>
+            <h3><%= config['author'] %></h3>
+            <h4><%= config['about'] %></h4>
+          </div>
         </div>
-        <p><%= config['about'] %></p>
-        <hr/>
       </div>
-      <div class="row">
-        <div class="col-md-8" id="main">
-          <%= Kramdown::Document.new(book, config['kramdown'][target]).to_html %>
-        </div>
-        <div class="col-md-4">
-          <div id="toc" class="well" >
+    </header>
+
+    <section class="main">
+      <div class="container">
+        <div class="row bottom">
+          <div class="nine columns">
+            <%= Kramdown::Document.new(content, config['kramdown'][target]).to_html %>
+          </div>
+          <div class="three columns" id="toc">
             <h3>Contents</h3>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>   
     <script type="text/javascript">
       $(document).ready(function() {
-        $("img").addClass("img-responsive");
-        $("table").addClass("table table-striped");
+        $("img").addClass("responsive");
+        $("table").addClass("u-full-width");
         
         partToc = null;
         $("#markdown-toc > li > a").each(function(){
@@ -58,7 +55,7 @@
           } 
         });
         
-        $("#markdown-toc").appendTo('#toc').addClass("list-unstyled nav");
+        $("#markdown-toc").appendTo('#toc');
                 
         $("script[type='math/tex']").replaceWith(function() {
             var tex = $(this).text();
@@ -77,7 +74,6 @@
         });
       });
     </script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
   </body>
 </html>
