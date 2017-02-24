@@ -1,17 +1,8 @@
 require 'erb'
-require "#{__dir__}/manuscript/compiler/html"
+require "#{__dir__}/manuscript/compiler/base"
+require "#{__dir__}/manuscript/compiler/#{ARGV[0]}"
 
-APP_ROOT = "#{__dir__}/.."
+TARGET =  Object.const_get("Manuscript::Compiler::#{ARGV[0].capitalize}")
 
-TARGETS = ['html', 'tex', 'epub']
+FileUtils.mkdir_p("#{APP_ROOT}/output")
 
-TARGET =  case ARGV[0]
-          when 'html'
-            Manuscript::Compiler::Html
-          when 'tex'
-            require "#{__dir__}/manuscript/compiler/latex"
-            Manuscript::Compiler::Latex
-          when 'epub'
-            require "#{__dir__}/manuscript/compiler/epub"
-            Manuscript::Compiler::Epub
-          end

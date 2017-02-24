@@ -2,11 +2,14 @@ require "#{__dir__}/../converter/latex"
 
 module Manuscript
   module Compiler
-    class Latex < Html
+    class Latex < Base
+      def target 
+        'tex'
+      end
+      
       def compile
-        `rm -rf #{APP_ROOT}/output/*`
-
-        `mkdir #{APP_ROOT}/output/images`
+        FileUtils.rm_rf Dir.glob("#{APP_ROOT}/output/*")
+        FileUtils.mkdir("#{APP_ROOT}/output/images")
         Dir.chdir("#{APP_ROOT}/assets/images")
       
         width = config['kramdown']['tex']['max_figure_width'].nil? ? 10000 : config['kramdown']['tex']['max_figure_width'].to_i
@@ -22,7 +25,7 @@ module Manuscript
           end
         end
       
-        File.write("#{APP_ROOT}/output/#{config['output']}.#{@target}", ERB.new(@template).result(binding))
+        File.write("#{APP_ROOT}/output/#{config['output']}.#{target}", ERB.new(@template).result(binding))
       end
     end
   end

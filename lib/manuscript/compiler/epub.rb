@@ -2,13 +2,12 @@ require "#{__dir__}/../converter/epub"
 
 module Manuscript
   module Compiler
-    class Epub < Html
+    class Epub < Base
       @@toc = []
       @@chapters = []
       @@figures = []
-      def initialize(theme = :default, target = :html)
+      def initialize(theme = :default)
         @theme = theme
-        @target = target.to_s
         @config = YAML.load_file("#{APP_ROOT}/config/application.yml")
         @template = File.read("#{APP_ROOT}/assets/layouts/epub/#{theme}.xhtml.erb")
         @cover_template = File.read("#{APP_ROOT}/assets/layouts/epub/cover.xhtml.erb")
@@ -16,6 +15,10 @@ module Manuscript
         @css_templage = File.read("#{APP_ROOT}/assets/layouts/epub/css/styles.css.erb")
       end
     
+      def target
+        'epub'
+      end
+      
       def content 
         @content
       end
@@ -48,9 +51,9 @@ module Manuscript
           end
         end
         
-        # FileUtils.rm_rf "./contents"
-        # FileUtils.rm_rf "./META-INF"
-        # FileUtils.rm "mimetype"
+        FileUtils.rm_rf "./contents"
+        FileUtils.rm_rf "./META-INF"
+        FileUtils.rm "mimetype"
       end
       
       def compile
