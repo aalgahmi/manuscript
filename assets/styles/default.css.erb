@@ -26,46 +26,43 @@ header h3 {
 img.responsive {
   width: 100%;
 }
-
-div.header.part {
-  font-size: 150%;
-  text-align: center;
-  padding: 2em .1em 1.5em .1em;
-}
-
 <% else %>
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, p, pre, code, blockquote {
 	font-weight: normal;
 	font-style: normal;
 }
 td, th {
-	border-style:solid;
-	border-width:1px;
+	border-style: solid;
+	border-width: 1px;
 }
 table {
-	border-collapse:collapse;
+	border-collapse: collapse;
 }
-li, ul, ol {
-	margin: 0;
-	padding: 0;
+nav > ol {
+  list-style: none;
 }
+
 body {
 	-epub-hyphens: auto;
 	-webkit-hyphens: auto;
 }
 p {
 	font-family: serif; 
-	font-size:0.888em;
-	margin-bottom:0;
-	margin-left:0;
-	margin-right:0;
-	margin-top:0;
-	text-indent:0;
+	font-size: 0.888em;
+	margin-bottom: 0;
+	margin-left: 0;
+	margin-right: 0;
+	margin-top: 0;
+	text-indent: 0;
 }
 <% end %>
 
 <%= Rouge::Themes::Github.render(scope: '.highlighter-rouge') %>
   
+h1:not([role="chapter"]) {
+  font-size: 150%;
+}
+
 figure img {
 	margin: .75em auto;
 }

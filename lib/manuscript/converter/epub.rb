@@ -25,18 +25,15 @@ module Kramdown
         end
         
         @toc << [el.options[:level], attr['id'], el.children] if attr['id'] && in_toc?(el)
-        level = attr['role'] == 'part' ? 0 : output_header_level(el.options[:level])
-        Manuscript::Compiler::Epub.add_to_toc(el.options[:raw_text], level, attr['id'], attr['role']) if level <= 2
-        if attr['role'] == 'part'
-          %(#{' '*indent}<div id="#{attr['id']}" class="part header">#{inner(el, indent)}</div>)
-        else
-          if level == 1
-            Manuscript::Compiler::Epub.add_to_chapters(attr['id'])
-            format_as_block_html("h#{level}", attr, %(<span class="u-pull-right">#{@chapter_counter}</span> #{inner(el, indent)}), indent)
-          else
-            format_as_block_html("h#{level}", attr, inner(el, indent), indent)
-          end
+        level = output_header_level(el.options[:level])
+        Manuscript::Compiler::Epub.add_to_toc(el.options[:raw_text], (attr['role'].nil? || attr['role'] == 'chapter' ? level : 0), attr['id'], attr['role']) if level <= 2
+        
+        if level == 1 && ( !attr['role'] || attr['role'] == 'chapter')
+          attr['role'] = 'chapter'
+          Manuscript::Compiler::Epub.add_to_chapters(attr['id'])
         end
+          
+        format_as_block_html("h#{level}", attr, inner(el, indent), indent)
       end
       
       def convert_a(el, indent)

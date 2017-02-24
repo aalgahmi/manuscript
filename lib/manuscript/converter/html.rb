@@ -26,17 +26,15 @@ module Kramdown
         end
         
         @toc << [el.options[:level], attr['id'], el.children] if attr['id'] && in_toc?(el)
-        if attr['role'] == 'part'
-          %(#{' '*indent}<div id="#{attr['id']}" class="part header">#{inner(el, indent)}</div>)
+        
+        level = output_header_level(el.options[:level])
+        if level == 1 && ( !attr['role'] || attr['role'] == 'chapter')
+          attr['role'] = 'chapter'
+          @chapter_counter = (@chapter_counter || 0) + 1
+          @figure_counter = 0
+          format_as_block_html("h#{level}", attr, %(<span class="u-pull-right">#{@chapter_counter}</span> #{inner(el, indent)}), indent)
         else
-          level = output_header_level(el.options[:level])
-          if level == 1
-            @chapter_counter = (@chapter_counter || 0) + 1
-            @figure_counter = 0
-            format_as_block_html("h#{level}", attr, %(<span class="u-pull-right">#{@chapter_counter}</span> #{inner(el, indent)}), indent)
-          else
-            format_as_block_html("h#{level}", attr, inner(el, indent), indent)
-          end
+          format_as_block_html("h#{level}", attr, inner(el, indent), indent)
         end
       end
       

@@ -45,15 +45,15 @@
         $("img").addClass("responsive");
         $("table").addClass("u-full-width");
         
-        partToc = null;
+/*        partToc = null;
         $("#markdown-toc > li > a").each(function(){
           if ($($(this).attr('href')).hasClass("part")) {
             $(this).parent().append("<ul class=\"part-toc\"></ul>");
             partToc = $(this).parent().find('.part-toc');
           } else {
             $(this).parent().appendTo(partToc);
-          } 
-        });
+          }
+        });*/
         
         $("#markdown-toc").appendTo('#toc');
                 

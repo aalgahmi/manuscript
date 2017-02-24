@@ -2,11 +2,17 @@ module Kramdown
   module Converter
     class Latex < Base
       def convert_header(el, opts)
-        type = @options[:latex_headers][output_header_level(el.options[:level]) - 1]
+        level = output_header_level(el.options[:level])
+        type = @options[:latex_headers][level - 1]
         if ((id = el.attr['id']) ||
             (@options[:auto_ids] && (id = generate_id(el.options[:raw_text])))) && in_toc?(el)
-          if el.attr['role'] == 'part'
-            "\\part{#{inner(el, opts)}}\\hypertarget{#{id}}{}\\label{#{id}}\n\n"
+          
+          if level == 1 && el.attr['role'] && el.attr['role'] != 'chapter'
+            if el.attr['role'] == 'part'
+              "\\part{#{inner(el, opts)}}\\hypertarget{#{id}}{}\\label{#{id}}\n\n"
+            else
+              "\\#{type}*{#{inner(el, opts)}}\\addcontentsline{toc}{chapter}{#{inner(el, opts)}}\\hypertarget{#{id}}{}\\label{#{id}}\n\n"
+            end
           else
             "\\#{type}{#{inner(el, opts)}}\\hypertarget{#{id}}{}\\label{#{id}}\n\n"
           end

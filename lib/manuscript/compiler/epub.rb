@@ -48,9 +48,9 @@ module Manuscript
           end
         end
         
-        FileUtils.rm_rf "./contents"
-        FileUtils.rm_rf "./META-INF"
-        FileUtils.rm "mimetype"
+        # FileUtils.rm_rf "./contents"
+        # FileUtils.rm_rf "./META-INF"
+        # FileUtils.rm "mimetype"
       end
       
       def compile
@@ -120,21 +120,30 @@ module Manuscript
       
       def include_toc
         toc = ""
+        indent = 3
         @@toc.each_with_index do |t, i|
-          indent = '  ' * t[:level]
-          if i == 0 || ((i + 1) < @@toc.count && @@toc[i + 1][:level] > t[:level])
-            toc << %(<li>\n<a href="#{t[:file]}##{t[:id]}">#{t[:name]}</a>\n)
-            toc << %(<ol>\n) if (i + 1) < @@toc.count
-          elsif (i + 1) < @@toc.count && @@toc[i + 1][:level] == t[:level]
-            toc << %(<li><a href="#{t[:file]}##{t[:id]}">#{t[:name]}</a></li>\n)
-          elsif (i + 1) < @@toc.count && @@toc[i + 1][:level] < t[:level]
-            toc << %(<li><a href="#{t[:file]}##{t[:id]}">#{t[:name]}</a></li>\n)
-            toc << "</ol>\n</li>\n" * (t[:level] - @@toc[i + 1][:level])
+          level = t[:level]
+          look_ahead = (i + 1) < @@toc.count ? @@toc[i + 1][:level] : -1
+          
+          toc << %(#{'  ' * indent}<li>\n)
+          toc << %(#{'  ' * (indent + 1)}<a href="#{t[:file]}##{t[:id]}">#{t[:name]}</a>\n)
+          
+          if look_ahead == level
+            toc << %(#{'  ' * indent}</li>\n)
+          elsif look_ahead > level
+            toc << %(#{'  ' * (indent + 1)}<ol>\n)
+            indent = indent + 2
+          elsif look_ahead != -1 && look_ahead < level
+            (level - look_ahead).times do |n|
+              toc << %(#{'  ' * (indent - n)}</li>\n)
+              toc << %(#{'  ' * (indent = indent - n - 1)}</ol>\n)
+            end
+            toc << %(#{'  ' * (indent = indent - 1)}</li>\n)
           end
         end
-        toc << "</ol>\n</li>\n" * @@toc.last[:level]
+        toc << %(#{'  ' * indent}</li>\n)
         
-        %(<nav epub:type="toc">\n<h3>Table of contents</h3>\n<ol>#{toc}</ol>\n</nav>)
+        %(<nav epub:type="toc">\n    <h3>Table of contents</h3>\n    <ol>\n#{toc}    </ol>\n  </nav>)
       end
       
       def self.add_to_toc(name, level, id, role)
