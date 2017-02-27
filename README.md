@@ -141,10 +141,10 @@ To generate the EPUB3 version of the book you run:
 ./generate epub
 ```
 
-And from this `.epub version you can use Amazon's [KindleGen](https://www.amazon.com/gp/feature.html?docId=1000765211) to create the MOBI version of the book:
+And from this `.epub` version you can use Amazon's [KindleGen](https://www.amazon.com/gp/feature.html?docId=1000765211) to create the MOBI version of the book:
 
 ``` sh
-cd output/
+cd ./output/
 kindlegen manuscript.epub -o manuscript.mobi
 ```
 
