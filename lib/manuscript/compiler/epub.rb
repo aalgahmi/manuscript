@@ -50,7 +50,7 @@ module Manuscript
             zip.add(f.sub(path +'/',''), f) 
           end
         end
-        
+
         FileUtils.rm_rf "./contents"
         FileUtils.rm_rf "./META-INF"
         FileUtils.rm "mimetype"
@@ -136,15 +136,15 @@ module Manuscript
           elsif look_ahead > level
             toc << %(#{'  ' * (indent + 1)}<ol>\n)
             indent = indent + 2
-          elsif look_ahead != -1 && look_ahead < level
-            (level - look_ahead).times do |n|
+          elsif look_ahead < level
+            (look_ahead != -1 ? (level - look_ahead) : level).times do |n|
               toc << %(#{'  ' * (indent - n)}</li>\n)
               toc << %(#{'  ' * (indent = indent - n - 1)}</ol>\n)
             end
-            toc << %(#{'  ' * (indent = indent - 1)}</li>\n)
+            
+            toc << %(#{'  ' * (indent = look_ahead != -1 ? indent - 1 : indent - level)}</li>\n)
           end
         end
-        toc << %(#{'  ' * indent}</li>\n)
         
         %(<nav epub:type="toc">\n    <h3>Table of contents</h3>\n    <ol>\n#{toc}    </ol>\n  </nav>)
       end
