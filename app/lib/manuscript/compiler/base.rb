@@ -5,8 +5,7 @@ module Manuscript
     class Base
       def initialize(theme = :default)
         @theme = theme
-        @config = YAML.load_file("#{APP_ROOT}/config/application.yml")
-        @template = File.read("#{APP_ROOT}/assets/layouts/#{theme}.#{target}.erb")
+        @config = YAML.load_file("#{APP_ROOT}/app/config/application.yml")
       end
     
       def config
@@ -20,9 +19,11 @@ module Manuscript
       def content 
         if @content.nil?
           @content = ''
-          Dir.glob("#{APP_ROOT}/manuscript/*").sort.each do |f|
-            @content << File.read(f)
-            @content << "\n\n"
+          Dir.glob("#{APP_ROOT}/contents/*").sort.each do |f|
+            unless File.directory?(f) || f.start_with?('.')
+              @content << File.read(f)
+              @content << "\n\n"
+            end
           end
         end
         
@@ -30,11 +31,11 @@ module Manuscript
       end
     
       def include_styles
-        ERB.new(File.read("#{APP_ROOT}/assets/styles/#{theme}.css.erb")).result(binding)
+        ERB.new(File.read("#{APP_ROOT}/app/assets/styles/#{theme}.css.erb")).result(binding)
       end
       
       def include_style(file)
-        File.read("#{APP_ROOT}/assets/styles/#{file}")
+        File.read("#{APP_ROOT}/app/assets/styles/#{file}")
       end
     
       def compile

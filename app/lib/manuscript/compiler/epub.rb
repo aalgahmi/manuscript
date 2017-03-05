@@ -7,12 +7,11 @@ module Manuscript
       @@chapters = []
       @@figures = []
       def initialize(theme = :default)
-        @theme = theme
-        @config = YAML.load_file("#{APP_ROOT}/config/application.yml")
-        @template = File.read("#{APP_ROOT}/assets/layouts/epub/#{theme}.xhtml.erb")
-        @cover_template = File.read("#{APP_ROOT}/assets/layouts/epub/cover.xhtml.erb")
-        @opf_templage = File.read("#{APP_ROOT}/assets/layouts/epub/package.opf.erb")
-        @css_templage = File.read("#{APP_ROOT}/assets/layouts/epub/css/styles.css.erb")
+        super
+        @template = File.read("#{APP_ROOT}/app/assets/layouts/epub/#{theme}.xhtml.erb")
+        @cover_template = File.read("#{APP_ROOT}/app/assets/layouts/epub/cover.xhtml.erb")
+        @opf_templage = File.read("#{APP_ROOT}/app/assets/layouts/epub/package.opf.erb")
+        @css_templage = File.read("#{APP_ROOT}/app/assets/layouts/epub/css/styles.css.erb")
       end
     
       def target
@@ -64,7 +63,9 @@ module Manuscript
         Dir.mkdir "#{APP_ROOT}/output/contents"
         Dir.chdir "#{APP_ROOT}/output"
         
-        FileUtils.cp_r(Dir.glob("#{APP_ROOT}/assets/images"), "./contents/")
+        FileUtils.cp_r(Dir.glob("#{APP_ROOT}/app/assets/images"), "./contents/")
+        FileUtils.cp(Dir.glob("#{APP_ROOT}/contents/figures/*"), "./contents/images")
+        
         count = 0
         Dir.foreach("./contents/images") do |f|
           unless File.directory?(f) || f.start_with?('.')
@@ -79,19 +80,20 @@ module Manuscript
           end
         end
         
-        FileUtils.cp_r("#{APP_ROOT}/assets/layouts/epub/META-INF", ".")
-        FileUtils.cp("#{APP_ROOT}/assets/layouts/epub/mimetype", ".")
+        FileUtils.cp_r("#{APP_ROOT}/app/assets/layouts/epub/META-INF", ".")
+        FileUtils.cp("#{APP_ROOT}/app/assets/layouts/epub/mimetype", ".")
         
         Dir.mkdir "#{APP_ROOT}/output/contents/css"
         File.write("#{APP_ROOT}/output/contents/css/styles.css", ERB.new(@css_templage).result(binding))
         @manifest_items << {id: 'style', href: 'css/styles.css', type: 'text/css'}
         
         count = 0
-        Dir.foreach("#{APP_ROOT}/manuscript") do |f|
+        Dir.glob("#{APP_ROOT}/contents/*").sort.each do |f|
           unless File.directory?(f) || f.start_with?('.')
             count += 1
             fname = File.basename(f, ".*")
-            @content = File.read("#{APP_ROOT}/manuscript/#{f}")
+
+            @content = File.read(f)
             
             if @content.include?("{:toc}")
               @manifest_items << {id: 'toc', href: "toc.xhtml", type: 'application/xhtml+xml', properties: 'nav'} 

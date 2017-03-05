@@ -6,10 +6,10 @@ Bundler.require(:default)
 APP_ROOT = "#{__dir__}"
 
 if ARGV.count == 1 && ['html', 'latex', 'epub'].include?(ARGV[0])
-  require "#{APP_ROOT}/lib/manuscript"
+  require "#{APP_ROOT}/app/lib/manuscript"
   
   TARGET.new(:default).compile
   puts "Done!"
 else
-  puts "Nothing was done; invalid target. Valid targets are html, tex, or epub."
+  puts "Nothing was done; invalid target. Valid targets are html, latex, or epub."
 end

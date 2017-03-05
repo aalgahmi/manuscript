@@ -3,14 +3,19 @@ require "#{__dir__}/../converter/latex"
 module Manuscript
   module Compiler
     class Latex < Base
+      def initialize(theme = :default)
+        super
+        @template = File.read("#{APP_ROOT}/app/assets/layouts/#{theme}.#{target}.erb")
+      end
+      
       def target 
         'tex'
       end
       
       def compile
         FileUtils.rm_rf Dir.glob("#{APP_ROOT}/output/*")
-        FileUtils.mkdir("#{APP_ROOT}/output/images")
-        Dir.chdir("#{APP_ROOT}/assets/images")
+        FileUtils.cp_r("#{APP_ROOT}/app/assets/images", "#{APP_ROOT}/output/images")
+        Dir.chdir("#{APP_ROOT}/contents/figures")
       
         width = config['kramdown']['tex']['max_figure_width'].nil? ? 10000 : config['kramdown']['tex']['max_figure_width'].to_i
         Dir.foreach(".") do |f|
