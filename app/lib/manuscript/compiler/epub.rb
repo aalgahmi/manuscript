@@ -64,7 +64,7 @@ module Manuscript
         Dir.chdir "#{APP_ROOT}/output"
         
         FileUtils.cp_r(Dir.glob("#{APP_ROOT}/app/assets/images"), "./contents/")
-        FileUtils.cp(Dir.glob("#{APP_ROOT}/contents/figures/*"), "./contents/images")
+        FileUtils.cp(Dir.glob("#{APP_ROOT}/book/figures/*"), "./contents/images")
         
         count = 0
         Dir.foreach("./contents/images") do |f|
@@ -88,7 +88,7 @@ module Manuscript
         @manifest_items << {id: 'style', href: 'css/styles.css', type: 'text/css'}
         
         count = 0
-        Dir.glob("#{APP_ROOT}/contents/*").sort.each do |f|
+        Dir.glob("#{APP_ROOT}/book/*").sort.each do |f|
           unless File.directory?(f) || f.start_with?('.')
             count += 1
             fname = File.basename(f, ".*")

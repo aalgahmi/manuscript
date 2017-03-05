@@ -1,171 +1,427 @@
-**Manuscript** is a simple and to-the-point ruby application for compiling/converting books or reports written in Markdown text (using the [Kramdown](https://kramdown.gettalong.org) syntax) into HTML, PDF (via Latex), EPUB, and MOBI formats. This application strings together the following best-of-breed open-source tools to achieve its goals:
+/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 
-* **Kramdown**: is used to covert markdown into HTML or Latex with a few extensions to support parts, appendices and other non-chapter structures which can be coded as follows:
+/**
+ * 1. Set default font family to sans-serif.
+ * 2. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
 
-  ``` text
-  
-  # Part One
-  {: role="part"}
-  ```
-  
-  or
-  
-  ``` text
-  
-  # Preface
-  {: role="preface"}
-  ```
-* **Rouge**: is used for syntax highlighting by both the HTML and EPUB compilers.
-* **Minted**: is used for syntax highlighting by the Latex compiler.
-* **Katex**: is used to render mathematical formulas by the HTML compiler; mathematical formulas are supported natively by Latex. The EPUB is not supported yet; such support can be added using MathJax but that inflates the size of the EPUB book and is for now left to the user to add if needed.
-* **MiniMagick**: is used for resizing figure images by the Latex compiler.
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
 
-## Installation
-First clone the application:
+/**
+ * Remove default margin.
+ */
 
-``` sh
-git clone https://github.com/aalgahmi/manuscript.git
-```
+body {
+  margin: 0;
+}
 
-This creates a `manuscript` folder which you can rename to something reflective of your book or report:
+/* HTML5 display definitions
+   ========================================================================== */
 
-``` sh
-mv manuscript my_first_book
-```
+/**
+ * Correct `block` display not defined for any HTML5 element in IE 8/9.
+ * Correct `block` display not defined for `details` or `summary` in IE 10/11
+ * and Firefox.
+ * Correct `block` display not defined for `main` in IE 11.
+ */
 
-Then you:
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
 
-``` sh
-cd my_first_book
-```
+/**
+ * 1. Correct `inline-block` display not defined in IE 8/9.
+ * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
+ */
 
-This application has the following directory structure: 
+audio,
+canvas,
+progress,
+video {
+  display: inline-block; /* 1 */
+  vertical-align: baseline; /* 2 */
+}
 
-``` text
-.
-├── Gemfile
-├── Gemfile.lock
-├── LICENSE.txt
-├── README.md
-├── app
-│   ├── assets
-│   │   ├── fonts
-│   │   ├── images
-│   │   │   └── cover.png
-│   │   ├── layouts
-│   │   │   ├── ...
-│   │   └── styles
-│   │       ├── ...
-│   ├── config
-│   │   └── application.yml
-│   ├── lib
-│   │   ├── ...
-│   └── test
-│       └── ...
-├── contents
-│   ├── 001_dedication.md
-│   ├── 002_prologue.md
-│   ├── 003_toc.md
-│   ├── 004_chp_01.md
-│   ├── 005_chp_02.md
-│   ├── 006_epilogue.md
-│   ├── 007_appendix.md
-│   └── figures
-│       ├── fig_01_01.png
-│       ├── fig_01_02.png
-│       └── fig_02_01.png
-├── generate
-└── output
-    └── ...
-```
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
 
-It contains a *dummy* sample book whose contents in the following folders could be replaced by your book's contents:
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
 
-* `./contents` which contains the book's markdown documents and figures. The figures are stored inside the `./contents/figures` folder. While there is no restriction on the figure names, the markdown documents must be given names whose alphanumerical order determines their placement in the book. It is, therefore, common to prefix their names with two or three digits so as to put them in order.
-* `./app/assets/images` which contains the cover image of the book. If the name of the cover image is not `cover.png`, the new name will need to be specified in the application config file `./app/config/application.yml`. 
+/**
+ * Address `[hidden]` styling not present in IE 8/9/10.
+ * Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.
+ */
 
-The application comes with a default theme which you can change under the `./app/assets` folder.
+[hidden],
+template {
+  display: none;
+}
 
-## Configuration
-As mentioned above, the application comes with a configuration file `./app/config/application.yml` that looks like this:
+/* Links
+   ========================================================================== */
 
-``` yaml
-manuscript:
-  compiler:
-    title: A Sample Book
-    author: Abdulmalek Al-Gahmi
-    about: A example book demoing the manuscript system for authoring and publishing books
-    
-    output: manuscript
-    
-    epub:
-      cover_image: images/cover.png
-      include_mathjax: false
-    
-    kramdown:
-      html:
-        input: GFM
-        toc_levels: "1,2"
-        math_engine: mathjax
-        syntax_highlighter: rouge
+/**
+ * Remove the gray background color from active links in IE 10.
+ */
 
-      tex:
-        max_figure_width: 300px
-        input: GFM
-        latex_headers: chapter,section,subsection,subsubsection,paragraph,subparagraph
-        syntax_highlighter: minted
-        syntax_highlighter_opts:
-          line_numbers: true
-```
+a {
+  background-color: transparent;
+}
 
-In this file you'll need to change the values for `title`, `author`, `about` (description), and `output` (name of the produced book file minus extension) configurations of the book. The other configurations have sensible defaults and need only be changed if different carefully considered values are required.
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
 
-As mentioned before, if the cover image of your book is not `images/cover.png`, the new name needs to be specified in the `epub: cover_image` configuration. The `epub: include_mathjax` is for future use and is not currently used. 
+a:active,
+a:hover {
+  outline: 0;
+}
 
-The `kramdown` configuration contains the Kramdown options for both the HTML and the Latex (tex) compilers. More information about these options can be found in [Kramdown Configuration Options](https://kramdown.gettalong.org/options.html). Notice that the HTML Kramdown options are used by both the HTML and EPUB compilers.
+/* Text-level semantics
+   ========================================================================== */
 
-For latex, `MiniMagick` is used to resize the figure images proportional to the `kramdown:tex:max_figure_width` configuration which changes based on the the document class of your latex theme.
+/**
+ * Address styling not present in IE 8/9/10/11, Safari, and Chrome.
+ */
 
-## Usage
-This application comes with a single simple command: `generate`. This command will compile the book's markdown documents and figure images into the desired target format. The result of such generation is saved under the `./output` folder.
+abbr[title] {
+  border-bottom: 1px dotted;
+}
 
-To generate the HTML version of the book, run:
+/**
+ * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
+ */
 
-``` sh
-./generate html
-```
+b,
+strong {
+  font-weight: bold;
+}
 
-Similarly to generate the PDF version of the book, you first run:
-``` sh
-./generate latex
-```
+/**
+ * Address styling not present in Safari and Chrome.
+ */
 
-And then use your [Latex installation](https://www.tug.org/texlive/) to produce the PDF version of the book from the generated `.tex` output file. For instance the following can be used to generate the PDF version of the dummy sample book.
+dfn {
+  font-style: italic;
+}
 
-``` sh
-cd ./output
-pdflatex -shell-escape manuscript.tex
-pdflatex -shell-escape manuscript.tex
-```
+/**
+ * Address variable `h1` font-size and margin within `section` and `article`
+ * contexts in Firefox 4+, Safari, and Chrome.
+ */
 
-To generate the EPUB3 version of the book you run:
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
 
-``` sh
-./generate epub
-```
+/**
+ * Address styling not present in IE 8/9.
+ */
 
-And from this `.epub` version you can use Amazon's [KindleGen](https://www.amazon.com/gp/feature.html?docId=1000765211) to create the MOBI version of the book:
+mark {
+  background: #ff0;
+  color: #000;
+}
 
-``` sh
-cd ./output/
-kindlegen manuscript.epub -o manuscript.mobi
-```
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
 
-## Contribution
-Bug reports and pull requests are welcome on GitHub at https://github.com/aalgahmi/manuscript.
+small {
+  font-size: 80%;
+}
 
-## Contact
-Abdulmalek Al-Gahmi at [this blog](http://aalgahmi.surge.sh) and [Twitter](https://twitter.com/aalgahmi)
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
 
-## License
-This application is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+/* Embedded content
+   ========================================================================== */
+
+/**
+ * Remove border when inside `a` element in IE 8/9/10.
+ */
+
+img {
+  border: 0;
+}
+
+/**
+ * Correct overflow not hidden in IE 9/10/11.
+ */
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Grouping content
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 8/9 and Safari.
+ */
+
+figure {
+  margin: 1em 40px;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ */
+
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+/**
+ * Contain overflow in all browsers.
+ */
+
+pre {
+  overflow: auto;
+}
+
+/**
+ * Address odd `em`-unit font size rendering in all browsers.
+ */
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+/* Forms
+   ========================================================================== */
+
+/**
+ * Known limitation: by default, Chrome and Safari on OS X allow very limited
+ * styling of `select`, unless a `border` property is set.
+ */
+
+/**
+ * 1. Correct color not being inherited.
+ *    Known issue: affects color of disabled elements.
+ * 2. Correct font properties not being inherited.
+ * 3. Address margins set differently in Firefox 4+, Safari, and Chrome.
+ */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit; /* 1 */
+  font: inherit; /* 2 */
+  margin: 0; /* 3 */
+}
+
+/**
+ * Address `overflow` set to `hidden` in IE 8/9/10/11.
+ */
+
+button {
+  overflow: visible;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.
+ * Correct `select` style inheritance in Firefox.
+ */
+
+button,
+select {
+  text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button; /* 2 */
+  cursor: pointer; /* 3 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+
+/**
+ * Remove inner padding and border in Firefox 4+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/**
+ * Address Firefox 4+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+input {
+  line-height: normal;
+}
+
+/**
+ * It's recommended that you don't attempt to style these elements.
+ * Firefox's implementation doesn't respect box-sizing, padding, or width.
+ *
+ * 1. Address box sizing set to `content-box` in IE 8/9/10.
+ * 2. Remove excess padding in IE 8/9/10.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Fix the cursor style for Chrome's increment/decrement buttons. For certain
+ * `font-size` values of the `input`, it causes the cursor style of the
+ * decrement button to change from `default` to `text`.
+ */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+  -webkit-appearance: textfield; /* 1 */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; /* 2 */
+  box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari and Chrome on OS X.
+ * Safari (but not Chrome) clips the cancel button when the search input has
+ * padding (and `textfield` appearance).
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct `color` not being inherited in IE 8/9/10/11.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ */
+
+legend {
+  border: 0; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Remove default vertical scrollbar in IE 8/9/10/11.
+ */
+
+textarea {
+  overflow: auto;
+}
+
+/**
+ * Don't inherit the `font-weight` (applied by a rule above).
+ * NOTE: the default cannot safely be changed in Chrome and Safari on OS X.
+ */
+
+optgroup {
+  font-weight: bold;
+}
+
+/* Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+}

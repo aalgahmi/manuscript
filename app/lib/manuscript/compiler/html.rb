@@ -15,7 +15,7 @@ module Manuscript
       def compile
         FileUtils.rm_rf Dir.glob("#{APP_ROOT}/output/*")
         FileUtils.cp_r("#{APP_ROOT}/app/assets/images", "#{APP_ROOT}/output/images")
-        FileUtils.cp(Dir.glob("#{APP_ROOT}/contents/figures/*"), "#{APP_ROOT}/output/images")
+        FileUtils.cp(Dir.glob("#{APP_ROOT}/book/figures/*"), "#{APP_ROOT}/output/images")
         File.write("#{APP_ROOT}/output/#{config['output']}.#{target}", ERB.new(@template).result(binding))
       end
     end

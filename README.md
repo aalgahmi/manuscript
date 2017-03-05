@@ -62,7 +62,7 @@ This application has the following directory structure:
 │   │   ├── ...
 │   └── test
 │       └── ...
-├── contents
+├── book
 │   ├── 001_dedication.md
 │   ├── 002_prologue.md
 │   ├── 003_toc.md
@@ -81,7 +81,7 @@ This application has the following directory structure:
 
 It contains a *dummy* sample book whose contents in the following folders could be replaced by your book's contents:
 
-* `./contents` which contains the book's markdown documents and figures. The figures are stored inside the `./contents/figures` folder. While there is no restriction on the figure names, the markdown documents must be given names whose alphanumerical order determines their placement in the book. It is, therefore, common to prefix their names with two or three digits so as to put them in order.
+* `./book` which contains the book's markdown documents and figures. The figures are stored inside the `./book/figures` folder. While there is no restriction on the figure names, the markdown documents must be given names whose alphanumerical order determines their placement in the book. It is, therefore, common to prefix their names with two or three digits so as to put them in order.
 * `./app/assets/images` which contains the cover image of the book. If the name of the cover image is not `cover.png`, the new name will need to be specified in the application config file `./app/config/application.yml`. 
 
 The application comes with a default theme which you can change under the `./app/assets` folder.

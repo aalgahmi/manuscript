@@ -19,7 +19,7 @@ module Manuscript
       def content 
         if @content.nil?
           @content = ''
-          Dir.glob("#{APP_ROOT}/contents/*").sort.each do |f|
+          Dir.glob("#{APP_ROOT}/book/*").sort.each do |f|
             unless File.directory?(f) || f.start_with?('.')
               @content << File.read(f)
               @content << "\n\n"
