@@ -39,6 +39,14 @@ Then you:
 cd my_first_book
 ```
 
+Next you run:
+
+``` sh
+bundle
+```
+
+to download and install the required gems.
+
 This application has the following directory structure: 
 
 ``` text
