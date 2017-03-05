@@ -135,28 +135,13 @@ The `kramdown` configuration contains the Kramdown options for both the HTML and
 For latex, `MiniMagick` is used to resize the figure images proportional to the `kramdown:tex:max_figure_width` configuration which changes based on the the document class of your latex theme.
 
 ## Usage
-This application comes with a single simple command: `generate`. This command will compile the book's markdown documents and figure images into the desired target format. The result of such generation is saved under the `./output` folder.
-
-To generate the HTML version of the book run:
+This application comes with a single simple command: `generate`. This command compiles the book's markdown documents and figure images into the desired target format. Simply run the following command and follow any given instructions:
 
 ``` sh
-./generate html
+./generate target
 ```
 
-Similarly to generate the Latex version of the book run:
-``` sh
-./generate latex
-```
-
-And to generate the PDF version of the book run the following command and follow its instructions:
-``` sh
-./generate pdf
-```
-
-Finally to generate the MOBI version of the book run the following command and follow its instructions:
-``` sh
-./generate mobi
-```
+where `target` can by any of the following: `html`, `latex`, `pdf`, `epub`, or `mobi`.
 
 ## Contribution
 Bug reports and pull requests are welcome on GitHub at https://github.com/aalgahmi/manuscript.
