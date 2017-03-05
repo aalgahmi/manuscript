@@ -5,11 +5,33 @@ Bundler.require(:default)
 
 APP_ROOT = "#{__dir__}"
 
-if ARGV.count == 1 && ['html', 'latex', 'epub'].include?(ARGV[0])
+if ARGV.count == 1 && ['html', 'latex', 'pdf', 'epub', 'mobi'].include?(ARGV[0])
+  
   require "#{APP_ROOT}/app/lib/manuscript"
   
-  TARGET.new(:default).compile
-  puts "Done!"
+  (compiler = TARGET.new(:default)).compile
+  if ARGV[0] == 'pdf'
+    puts %(
+The Latex version of this book has been created. To finish 
+generating the PDF version of this book do following:
+ 1. Make sure Latex (https://www.tug.org/texlive/) is
+    installed in your machine.
+ 2. Run the following:
+    cd ./output
+    pdflatex -shell-escape #{compiler.config['output']}.tex
+    pdflatex -shell-escape #{compiler.config['output']}.tex\n\n)
+  elsif ARGV[0] == 'mobi'
+    puts %(
+The EPBUB version of this book has been created. To finish 
+generating the MOBI version of this book do following:
+ 1. Download Amazon's KindleGen and add its kindlegen 
+    command to you path.
+ 2. Run the following:
+    cd ./output
+    kindlegen #{compiler.config['output']}.epub -o #{compiler.config['output']}.mobi\n\n)
+  else
+    puts "Done!"
+  end
 else
-  puts "Nothing was done; invalid target. Valid targets are html, latex, or epub."
+  puts "Nothing was done; invalid target. Valid targets are html, latex, pdf, epub, and mobi."
 end

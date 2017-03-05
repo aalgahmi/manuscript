@@ -137,36 +137,25 @@ For latex, `MiniMagick` is used to resize the figure images proportional to the 
 ## Usage
 This application comes with a single simple command: `generate`. This command will compile the book's markdown documents and figure images into the desired target format. The result of such generation is saved under the `./output` folder.
 
-To generate the HTML version of the book, run:
+To generate the HTML version of the book run:
 
 ``` sh
 ./generate html
 ```
 
-Similarly to generate the PDF version of the book, you first run:
+Similarly to generate the Latex version of the book run:
 ``` sh
 ./generate latex
 ```
 
-And then use your [Latex installation](https://www.tug.org/texlive/) to produce the PDF version of the book from the generated `.tex` output file. For instance the following can be used to generate the PDF version of the dummy sample book.
-
+And to generate the PDF version of the book run the following command and follow its instructions:
 ``` sh
-cd ./output
-pdflatex -shell-escape manuscript.tex
-pdflatex -shell-escape manuscript.tex
+./generate pdf
 ```
 
-To generate the EPUB3 version of the book you run:
-
+Finally to generate the MOBI version of the book run the following command and follow its instructions:
 ``` sh
-./generate epub
-```
-
-And from this `.epub` version you can use Amazon's [KindleGen](https://www.amazon.com/gp/feature.html?docId=1000765211) to create the MOBI version of the book:
-
-``` sh
-cd ./output/
-kindlegen manuscript.epub -o manuscript.mobi
+./generate mobi
 ```
 
 ## Contribution
