@@ -22,7 +22,7 @@ generating the PDF version of this book do following:
     pdflatex -shell-escape #{compiler.config['output']}.tex\n\n)
   elsif ARGV[0] == 'mobi'
     puts %(
-The EPBUB version of this book has been created. To finish 
+The EPUB version of this book has been created. To finish 
 generating the MOBI version of this book do following:
  1. Download Amazon's KindleGen and add its kindlegen 
     command to you path.
